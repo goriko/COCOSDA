@@ -35,6 +35,21 @@
             android:layout_marginBottom="10dp"
             />
 
+        <Button
+            android:id="@+id/buttonScan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan QR Code"
+            android:textStyle="normal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            />
+
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
