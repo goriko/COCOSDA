@@ -118,7 +118,8 @@ public class UserActivity extends AppCompatActivity
                     //that means the encoded format not matches
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
-                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                    String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
+                    Toast.makeText(this, ID, Toast.LENGTH_LONG).show();
                 }
             }
         } else {
