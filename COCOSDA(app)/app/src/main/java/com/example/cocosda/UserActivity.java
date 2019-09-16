@@ -37,7 +37,7 @@ public class UserActivity extends AppCompatActivity
     private ProgressDialog progressDialog;
 
     private IntentIntegrator qrScan;
-
+    public String temporaryStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,8 @@ public class UserActivity extends AppCompatActivity
         textViewName = (TextView) findViewById(R.id.textViewName);
 
         qrScan = new IntentIntegrator(this);
+
+
 
         firebaseAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("users").child(firebaseAuth.getCurrentUser().getUid());
@@ -109,7 +111,7 @@ public class UserActivity extends AppCompatActivity
                 try {
                     //converting the data to json
                     JSONObject obj = new JSONObject(result.getContents());
-                    //setting values to textviews
+                    //setting values to textview
                     Log.d("EYY", obj.toString());
                     textViewName.setText(obj.getString("name"));
                 } catch (JSONException e) {
@@ -118,7 +120,13 @@ public class UserActivity extends AppCompatActivity
                     //that means the encoded format not matches
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
-                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
+                    temporaryStr = result.getContents();
+//                    Toast.makeText(this, temporaryStr, Toast.LENGTH_LONG).show();
+                    temporaryStr.substring(temporaryStr.lastIndexOf("=")+1);
+                    Toast.makeText(this, temporaryStr, Toast.LENGTH_LONG).show();
+
+
                 }
             }
         } else {
