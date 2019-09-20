@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,9 @@ import com.google.zxing.integration.android.IntentResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class UserActivity extends AppCompatActivity
         implements View.OnClickListener{
@@ -120,18 +124,27 @@ public class UserActivity extends AppCompatActivity
                     //that means the encoded format not matches
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
-<<<<<<< HEAD
-//                    Toast.makeText(this, result.getContents(), Toast.LENGTH_LONG).show();
-                    temporaryStr = result.getContents();
-//                    Toast.makeText(this, temporaryStr, Toast.LENGTH_LONG).show();
-                    temporaryStr.substring(temporaryStr.lastIndexOf("=")+1);
-                    Toast.makeText(this, temporaryStr, Toast.LENGTH_LONG).show();
 
+                    //extracting id number only
+                    final String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Kit");
+                    databaseReference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists()){
+                                Date currTime = Calendar.getInstance().getTime();
+                                databaseReference.child(ID).setValue(currTime.toString());
+                            }else{
+                                Toast.makeText(UserActivity.this, "already exist", Toast.LENGTH_LONG).show();
+                            }
+                        }
 
-=======
-                    String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
-                    Toast.makeText(this, ID, Toast.LENGTH_LONG).show();
->>>>>>> a90674315f642019d7fad533c4d1f9256b40d06e
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                 }
             }
         } else {
