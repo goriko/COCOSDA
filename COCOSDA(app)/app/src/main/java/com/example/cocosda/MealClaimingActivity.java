@@ -29,9 +29,9 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.Date;
 
-public class UserActivity extends AppCompatActivity implements View.OnClickListener{
+public class MealClaimingActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button buttonLogout, buttonScan;
+    private Button buttonLogout, buttonScan, snak1Btn, lunchBtn, snak2Btn;
     private TextView textViewName;
 
     private FirebaseAuth firebaseAuth;
@@ -40,22 +40,24 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
 
     private IntentIntegrator qrScan;
-    public String temporaryStr;
+    String temp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_meal_claiming);
 
         progressDialog = new ProgressDialog(this);
 
+        progressDialog.dismiss();
 //        progressDialog.setMessage("Logging in....");
 //        progressDialog.setCancelable(false);
 //        progressDialog.show();
-        progressDialog.dismiss();
 
+        lunchBtn = findViewById(R.id.btnLunch);
+        snak2Btn = findViewById(R.id.btnSnak2);
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
-        buttonScan = (Button) findViewById(R.id.buttonScan);
+        snak1Btn= (Button) findViewById(R.id.btnSnak1);
         textViewName = (TextView) findViewById(R.id.textViewName);
 
         qrScan = new IntentIntegrator(this);
@@ -63,22 +65,6 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
 
         firebaseAuth = FirebaseAuth.getInstance();
-//        databaseReference = FirebaseDatabase.getInstance().getReference().child("user_station").child(firebaseAuth.getUid());
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.child("group_station").exists()){
-//                    progressDialog.dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
 //        databaseReference = FirebaseDatabase.getInstance().getReference("users").child(firebaseAuth.getCurrentUser().getUid());
 //        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
@@ -105,8 +91,21 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 //            }
 //        });
 
+        buttonLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseAuth.signOut();
+                startActivity(new Intent(MealClaimingActivity.this, MainActivity.class));
+            }
+        });
+
+
+
+
         buttonLogout.setOnClickListener(this);
-        buttonScan.setOnClickListener(this);
+        snak1Btn.setOnClickListener(this);
+        lunchBtn.setOnClickListener(this);
+        snak2Btn.setOnClickListener(this);
     }
 
     @Override
@@ -114,7 +113,15 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         if(v == buttonLogout){
             firebaseAuth.signOut();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
-        }else if(v == buttonScan){
+        }else if(v == snak1Btn){
+            temp = "morning_snack";
+//            Toast.makeText(this, temp, Toast.LENGTH_LONG).show();
+            qrScan.initiateScan();
+        }else if(v == lunchBtn){
+            temp = "lunch_meal";
+            qrScan.initiateScan();
+        }else if(v == snak2Btn){
+            temp = "afternoon_snack";
             qrScan.initiateScan();
         }
     }
@@ -131,7 +138,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     //converting the data to json
                     JSONObject obj = new JSONObject(result.getContents());
-                    //setting values to textview
+                    //setting values to textviewc1
                     Log.d("EYY", obj.toString());
                     textViewName.setText(obj.getString("name"));
                 } catch (JSONException e) {
@@ -141,17 +148,29 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                     //in this case you can display whatever data is available on the qrcode
                     //to a toast
 
+                    //filter where to insert
+//                    if(temp.equals("morning_snack")){
+//                        Toast.makeText(MealClaimingActivity.this,temp, Toast.LENGTH_LONG).show();
+//                    }else if(temp.equals("lunch_meal")){
+//                        Toast.makeText(MealClaimingActivity.this,temp, Toast.LENGTH_LONG).show();
+//                    }else if(temp.equals("afternoon_snack")){
+//                        Toast.makeText(MealClaimingActivity.this,temp, Toast.LENGTH_LONG).show();
+//                    }
+
                     //extracting id number only
+
                     final String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
-                    databaseReference = FirebaseDatabase.getInstance().getReference("Kit");
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Meal").child(temp);
                     databaseReference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(!dataSnapshot.exists()){
+                                String cmp;
                                 Date currTime = Calendar.getInstance().getTime();
+//                                cmp = "10/" + currTime.getDate() + "/2019";
                                 databaseReference.child(ID).setValue(currTime.toString());
                             }else{
-                                Toast.makeText(UserActivity.this, "already exist", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MealClaimingActivity.this, "already exist", Toast.LENGTH_LONG).show();
                             }
                         }
 
