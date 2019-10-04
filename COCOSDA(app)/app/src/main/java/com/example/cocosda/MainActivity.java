@@ -1,5 +1,6 @@
 package com.example.cocosda;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button buttonLogin;
     private ProgressDialog progressDialog;
     private DatabaseReference databaseReference;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +40,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAuth = FirebaseAuth.getInstance();
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Logging In....");
+        progressDialog.setCancelable(false);
         firebaseAuth = FirebaseAuth.getInstance();
         if(firebaseAuth.getCurrentUser() != null){
-//            finish();
+            progressDialog.show();
             databaseReference = FirebaseDatabase.getInstance().getReference().child("user_station").child(firebaseAuth.getUid());
             databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -50,9 +55,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if(temp.equals("meal_station")){
                         Toast.makeText(MainActivity.this, temp, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(MainActivity.this, MealClaimingActivity.class));
+                        finish();
                     }else if(temp.equals("kit_station")){
                         Toast.makeText(MainActivity.this, temp, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(MainActivity.this, UserActivity.class));
+                        finish();
+                    }else if(temp.equals("register_station")){
+                        Toast.makeText(MainActivity.this, temp,  Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(MainActivity.this, RegistrationActivity.class));
+                        finish();
                     }
                 }
 
@@ -64,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            startActivity(new Intent(getApplicationContext(), UserActivity.class));
         }
 
-        progressDialog = new ProgressDialog(this);
 
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -82,8 +92,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }else{
-            progressDialog.setMessage("Logging in....");
-            progressDialog.setCancelable(false);
             progressDialog.show();
 
             mAuth.signInWithEmailAndPassword(editTextEmail.getText().toString(), editTextPassword.getText().toString())
@@ -92,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         public void onComplete(@NonNull Task<AuthResult> task) {
 //                            progressDialog.dismiss();
                             if(task.isSuccessful()){
-//                                finish();
                                 databaseReference = FirebaseDatabase.getInstance().getReference().child("user_station").child(firebaseAuth.getUid());
                                 databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -103,9 +110,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                         if(temp.equals("meal_station")){
                                             Toast.makeText(MainActivity.this, temp, Toast.LENGTH_LONG).show();
                                             startActivity(new Intent(MainActivity.this, MealClaimingActivity.class));
+                                            finish();
                                         }else if(temp.equals("kit_station")){
                                             Toast.makeText(MainActivity.this, temp,  Toast.LENGTH_LONG).show();
                                             startActivity(new Intent(MainActivity.this, UserActivity.class));
+                                            finish();
+                                        }else if(temp.equals("register_station")){
+                                            Toast.makeText(MainActivity.this, temp,  Toast.LENGTH_LONG).show();
+                                            startActivity(new Intent(MainActivity.this, RegistrationActivity.class));
+                                            finish();
                                         }
                                     }
 

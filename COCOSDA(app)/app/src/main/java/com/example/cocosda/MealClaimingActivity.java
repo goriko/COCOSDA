@@ -31,8 +31,8 @@ import java.util.Date;
 
 public class MealClaimingActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button buttonLogout, buttonScan, snak1Btn, lunchBtn, snak2Btn;
-    private TextView textViewName;
+    private Button buttonLogout, buttonScan, snak1Btn, lunchBtn, snak2Btn, dinnerBtn;
+    private TextView textViewName, statusName;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
@@ -57,8 +57,10 @@ public class MealClaimingActivity extends AppCompatActivity implements View.OnCl
         lunchBtn = findViewById(R.id.btnLunch);
         snak2Btn = findViewById(R.id.btnSnak2);
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
-        snak1Btn= (Button) findViewById(R.id.btnSnak1);
+        snak1Btn = (Button) findViewById(R.id.btnSnak1);
+        dinnerBtn = findViewById(R.id.btnDinner);
         textViewName = (TextView) findViewById(R.id.textViewName);
+        statusName = findViewById(R.id.statusName);
 
         qrScan = new IntentIntegrator(this);
 
@@ -106,6 +108,15 @@ public class MealClaimingActivity extends AppCompatActivity implements View.OnCl
         snak1Btn.setOnClickListener(this);
         lunchBtn.setOnClickListener(this);
         snak2Btn.setOnClickListener(this);
+        dinnerBtn.setOnClickListener(this);
+
+        dinnerBtn.setEnabled(false);
+
+        Date currTime = Calendar.getInstance().getTime();
+        int tempDate = currTime.getDate();
+        if(tempDate == 25){
+            dinnerBtn.setEnabled(true);
+        }
     }
 
     @Override
@@ -159,18 +170,23 @@ public class MealClaimingActivity extends AppCompatActivity implements View.OnCl
 
                     //extracting id number only
 
+                    Date currDay = Calendar.getInstance().getTime();
+                    int tempDay = currDay.getDate();
+                    String day = ""+tempDay;
+
                     final String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
-                    databaseReference = FirebaseDatabase.getInstance().getReference("Meal").child(temp);
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Meal").child(day).child(temp);
                     databaseReference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if(!dataSnapshot.exists()){
-                                String cmp;
+//                                Toast.makeText(MealClaimingActivity.this, "", Toast.LENGTH_LONG).show();
                                 Date currTime = Calendar.getInstance().getTime();
-//                                cmp = "10/" + currTime.getDate() + "/2019";
                                 databaseReference.child(ID).setValue(currTime.toString());
+                                statusName.setText("Claiming");
                             }else{
-                                Toast.makeText(MealClaimingActivity.this, "already exist", Toast.LENGTH_LONG).show();
+                                statusName.setText("User Already claimed");
+//                                Toast.makeText(MealClaimingActivity.this, "Already claimed", Toast.LENGTH_LONG).show();
                             }
                         }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserActivity">
+    tools:context=".CertificateActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,16 +25,16 @@
             android:layout_marginBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Kit Station"
+            android:text="Certificate Claiming"
             android:textAlignment="center"
             android:textSize="36sp"
-            android:textStyle="normal"/>
+            android:textStyle="normal" />
 
         <Button
             android:id="@+id/buttonLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout"
+            android:text="Back"
             android:textStyle="normal"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
@@ -59,7 +59,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             />
-
         <TextView
             android:id="@+id/statusName"
             android:layout_width="match_parent"

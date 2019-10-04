@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserActivity">
+    tools:context=".SessionActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,16 +25,61 @@
             android:layout_marginBottom="10dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Kit Station"
+            android:text="Parallel Session"
             android:textAlignment="center"
             android:textSize="36sp"
-            android:textStyle="normal"/>
+            android:textStyle="normal" />
 
-        <Button
-            android:id="@+id/buttonLogout"
+        <TextView
+            android:id="@+id/roomPicker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Logout"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="normal" />
+
+        <Button
+            android:id="@+id/btnEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="End Session"
+            android:textStyle="normal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            />
+
+        <Button
+            android:id="@+id/btnRoom1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Room A"
+            android:textStyle="normal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            />
+
+        <Button
+            android:id="@+id/btnRoom2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Room  B"
             android:textStyle="normal"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
@@ -59,21 +104,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             />
-
-        <TextView
-            android:id="@+id/statusName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:textAlignment="center"
-            android:textSize="25sp"
-            android:textStyle="normal" />
 
     </LinearLayout>
 

@@ -18,7 +18,17 @@
             android:id="@+id/textViewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Meal Station"
+            android:textAlignment="center"
+            android:textSize="36sp"
+            android:textStyle="normal" />
 
         <Button
             android:id="@+id/buttonLogout"
@@ -78,6 +88,36 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             />
+
+        <Button
+            android:id="@+id/btnDinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Dinner Buffet"
+            android:textStyle="normal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            />
+
+        <TextView
+            android:id="@+id/statusName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="normal" />
 
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

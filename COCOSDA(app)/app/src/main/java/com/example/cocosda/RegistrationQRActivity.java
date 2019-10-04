@@ -2,7 +2,6 @@ package com.example.cocosda;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ThrowOnExtraProperties;
 import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -29,30 +28,26 @@ import org.json.JSONObject;
 import java.util.Calendar;
 import java.util.Date;
 
-public class UserActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegistrationQRActivity extends AppCompatActivity implements View.OnClickListener{
 
-    private Button buttonLogout, buttonScan;
-    private TextView textViewName, statusName;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference databaseReference;
-
     private ProgressDialog progressDialog;
-
     private IntentIntegrator qrScan;
-    public String temporaryStr;
+
+    private Button buttonLogout, buttonScan;
+    private TextView textViewName, statusName;
     private StatusClass statusClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user);
+        setContentView(R.layout.activity_registration_qr);
+
+        firebaseAuth = FirebaseAuth.getInstance();
 
         progressDialog = new ProgressDialog(this);
-
-//        progressDialog.setMessage("Logging in....");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
         progressDialog.dismiss();
 
         buttonLogout = (Button) findViewById(R.id.buttonLogout);
@@ -63,63 +58,43 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         qrScan = new IntentIntegrator(this);
 
 
-
-        firebaseAuth = FirebaseAuth.getInstance();
-//        databaseReference = FirebaseDatabase.getInstance().getReference().child("user_station").child(firebaseAuth.getUid());
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.child("group_station").exists()){
-//                    progressDialog.dismiss();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
-
-//        databaseReference = FirebaseDatabase.getInstance().getReference("users").child(firebaseAuth.getCurrentUser().getUid());
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                String temp;
-//                temp = dataSnapshot.child("title").getValue().toString()+" "+
-//                        dataSnapshot.child("fName").getValue().toString()+" "+
-//                        dataSnapshot.child("mName").getValue().toString()+" "+
-//                        dataSnapshot.child("lName").getValue().toString();
-//
-//                if(dataSnapshot.child("suffix").exists()){
-//                    temp = temp+" "+dataSnapshot.child("suffix").getValue().toString();
-//                }
-//                if(dataSnapshot.child("extension").exists()){
-//                    temp = temp+", "+dataSnapshot.child("extension").getValue().toString();
-//                }
-//                textViewName.setText(temp);
-//                progressDialog.dismiss();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
         buttonLogout.setOnClickListener(this);
         buttonScan.setOnClickListener(this);
+//        progressDialog = new ProgressDialog(this);
+//
+//        progressDialog.setMessage("Fetching Data.....");
+//        progressDialog.setCancelable(false);
+//        progressDialog.show();
+        Date currTime = Calendar.getInstance().getTime();
+        String currDay = ""+currTime.getDate();
+//        databaseReference = FirebaseDatabase.getInstance().getReference("Sessions").child(currDay).child("Register_Station").child(firebaseAuth.getUid().toString());
+//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.child("timeStart").exists() && !dataSnapshot.child("timeEnd").exists()){
+//                    startActivity(new Intent(RegistrationActivity.this, SessionActivity.class));
+//                    finish();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//        progressDialog.dismiss();
     }
 
     @Override
     public void onClick(View v) {
         if(v == buttonLogout){
-            firebaseAuth.signOut();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            startActivity(new Intent(this, RegistrationActivity.class));
+            finish();
         }else if(v == buttonScan){
             qrScan.initiateScan();
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -144,21 +119,24 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                     //to a toast
 
                     //extracting id number only
+                    Date currTime = Calendar.getInstance().getTime();
+                    String xtr = ""+currTime.getDate();
                     final String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
-                    databaseReference = FirebaseDatabase.getInstance().getReference("Kit");
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Registered_User").child(xtr);
                     databaseReference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Date currTime = Calendar.getInstance().getTime();
                             if(!dataSnapshot.exists()){
-                                Date currTime = Calendar.getInstance().getTime();
+                                currTime = Calendar.getInstance().getTime();
                                 statusClass = new StatusClass(ID, currTime.toString(), "0");
                                 databaseReference.child(ID).setValue(statusClass);
-                                statusName.setText("Claiming Kit!");
+                                statusName.setText("Registered!");
                                 qrScan.initiateScan();
                             }else{
-                                statusClass = new StatusClass(ID, dataSnapshot.child("time").getValue().toString(), dataSnapshot.child("status").getValue().toString() + "1");
+                                statusClass = new StatusClass(dataSnapshot.child("user_ID").getValue().toString(), dataSnapshot.child("time").getValue().toString(), dataSnapshot.child("status").getValue().toString() + "1");
                                 databaseReference.child(ID).setValue(statusClass);
-                                statusName.setText("Kit Already Claimed!");
+                                statusName.setText("User Already Registered!");
                                 qrScan.initiateScan();
                             }
                         }
@@ -176,3 +154,4 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 }
+
