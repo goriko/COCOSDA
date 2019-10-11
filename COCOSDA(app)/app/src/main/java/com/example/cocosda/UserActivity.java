@@ -145,7 +145,7 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
                     //extracting id number only
                     final String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
-                    databaseReference = FirebaseDatabase.getInstance().getReference("Kit");
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Kit").child(firebaseAuth.getUid().toString());
                     databaseReference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

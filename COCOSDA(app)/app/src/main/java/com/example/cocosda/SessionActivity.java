@@ -165,7 +165,7 @@ public class SessionActivity extends AppCompatActivity implements View.OnClickLi
                     final String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
                     FirebaseDatabase database =  FirebaseDatabase.getInstance();
                     String tempID = database.getReference("Sessions").child(tempStr).child(currDay).push().getKey();
-                    databaseReference = FirebaseDatabase.getInstance().getReference("Sessions").child(tempStr).child(currDay);
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Sessions").child(tempStr).child(currDay).child(firebaseAuth.getUid().toString());
 
                     statusClass = new StatusClass(ID, currTime.toString(), "0");
                     databaseReference.child(tempID).setValue(statusClass);

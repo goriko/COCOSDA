@@ -39,6 +39,7 @@ public class RegistrationQRActivity extends AppCompatActivity implements View.On
     private Button buttonLogout, buttonScan;
     private TextView textViewName, statusName;
     private StatusClass statusClass;
+    String tsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,11 +61,7 @@ public class RegistrationQRActivity extends AppCompatActivity implements View.On
 
         buttonLogout.setOnClickListener(this);
         buttonScan.setOnClickListener(this);
-//        progressDialog = new ProgressDialog(this);
-//
-//        progressDialog.setMessage("Fetching Data.....");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
+
         Date currTime = Calendar.getInstance().getTime();
         String currDay = ""+currTime.getDate();
 //        databaseReference = FirebaseDatabase.getInstance().getReference("Sessions").child(currDay).child("Register_Station").child(firebaseAuth.getUid().toString());
@@ -122,7 +119,7 @@ public class RegistrationQRActivity extends AppCompatActivity implements View.On
                     Date currTime = Calendar.getInstance().getTime();
                     String xtr = ""+currTime.getDate();
                     final String ID = result.getContents().substring(result.getContents().lastIndexOf("=") + 1);
-                    databaseReference = FirebaseDatabase.getInstance().getReference("Registered_User").child(xtr);
+                    databaseReference = FirebaseDatabase.getInstance().getReference("Registered_User").child(xtr).child(firebaseAuth.getUid().toString());
                     databaseReference.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
